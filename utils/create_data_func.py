@@ -39,8 +39,7 @@ def pull_data2(cell_sq_rad, stim_dim, scale=None):
     # STIMULUS
     # ========
     file_start_pos = [0] # starting position for each data file in time searies
-    file_NT        = []  # number of time points in each file
-    stim_list      = []  # list of stimuli
+    file_NT        = [] # number of time points in each file
     for i in range(N_files):
         stim_i = np.load(DATADIR+file_names[i]+'.npy')
         file_NT.append(stim_i.shape[0])
@@ -49,19 +48,15 @@ def pull_data2(cell_sq_rad, stim_dim, scale=None):
         scaled_stim = stim_i*255
         int8_stim = scaled_stim.astype(np.uint8)
         
-        if i == N_files-1:
-            stim_list.append(int8_stim)
+        if i == 0:
+            stim = int8_stim
+            file_start_pos.append(stim.shape[0])
+        elif i == N_files-1:
+            stim = np.append(stim, int8_stim, axis=0)
         else:
-            stim_list.append(int8_stim)
-            file_start_pos.append(file_NT[i]+file_start_pos[i])
-            
-    stim = np.zeros((sum(file_NT),220,220), dtype=np.uint8)
-    for i in range(2):
-        if i == N_files-1:
-            stim[file_start_pos[i]:,:,:] = stim_list[i]
-        else:
-            stim[file_start_pos[i]:file_start_pos[i+1],:,:] = stim_list[i]
-            
+            stim = np.append(stim, int8_stim, axis=0)
+            file_start_pos.append(stim.shape[0])
+
     # crop stimulus
     center     = 110 # center of image
     sq_rad = stim_dim//2 # square radius of croped image
