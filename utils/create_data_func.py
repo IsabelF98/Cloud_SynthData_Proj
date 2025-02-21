@@ -137,9 +137,9 @@ def pull_data2(cell_sq_rad, stim_dim, scale=None):
         f.create_dataset('y_pos', data=all_y_pos)
         f.create_dataset('cell_key', data=cell_key)
         f.create_dataset('file_start_pos', data=file_start_pos)
+        f.create_dataset('file_names', data=file_names)
         for i in range(len(spike_time)):
-            f.create_dataset('spike_time_cell_'+str(i), data=spike_time[i])
-            
+            f.create_dataset('spike_time_cell_'+str(i), data=spike_time[i])          
 
     print('++INFO: Data file created:', out_file)
     
